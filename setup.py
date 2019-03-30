@@ -849,24 +849,24 @@ class PyBuildExt(build_ext):
                     ret = os.system("%s -d %s | grep '(NEEDED)' > %s" \
                                     % (sysconfig.get_config_var('READELF'),
                                        do_readline, tmpfile))
-            elif find_executable('ldd'):
-                ret = os.system("ldd %s > %s" % (do_readline, tmpfile))
-            else:
-                ret = 256
-            if ret >> 8 == 0:
-                with open(tmpfile) as fp:
-                    for ln in fp:
-                        if 'curses' in ln:
-                            readline_termcap_library = re.sub(
-                                r'.*lib(n?cursesw?)\.so.*', r'\1', ln
-                            ).rstrip()
-                            break
-                        # termcap interface split out from ncurses
-                        if 'tinfo' in ln:
-                            readline_termcap_library = 'tinfo'
-                            break
-            if os.path.exists(tmpfile):
-                os.unlink(tmpfile)
+                elif find_executable('ldd'):
+                    ret = os.system("ldd %s > %s" % (do_readline, tmpfile))
+                else:
+                    ret = 256
+                if ret >> 8 == 0:
+                    with open(tmpfile) as fp:
+                        for ln in fp:
+                            if 'curses' in ln:
+                                readline_termcap_library = re.sub(
+                                    r'.*lib(n?cursesw?)\.so.*', r'\1', ln
+                                ).rstrip()
+                                break
+                            # termcap interface split out from ncurses
+                            if 'tinfo' in ln:
+                                readline_termcap_library = 'tinfo'
+                                break
+                if os.path.exists(tmpfile):
+                    os.unlink(tmpfile)
         else:
             do_readline = False
         # Issue 7384: If readline is already linked against curses,
