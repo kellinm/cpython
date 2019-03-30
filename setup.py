@@ -842,7 +842,7 @@ class PyBuildExt(build_ext):
                 readline_lib = 'edit'
             else:
                 readline_lib = 'readline'
-            do_readline = self.compiler.find_library_file(lib_dirs,
+            do_readline = self.compiler.find_library_file(self.lib_dirs,
                 readline_lib)
             if do_readline:
                 if CROSS_COMPILING:
